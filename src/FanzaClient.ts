@@ -16,13 +16,14 @@ export class FanzaClient {
     this.params = params;
   }
 
-  async getItemList(params: ItemListParamsWithoutKeys) {
-    const response = UrlFetchApp.fetch(
-      `${baseUrl}/ItemList?${this.generateGetParams({
-        ...this.params,
-        ...params,
-      })}`
-    );
+  getItemList(params: ItemListParamsWithoutKeys) {
+    const cmbParams: ItemListParams = {
+      api_id: this.params.appId,
+      affiliate_id: this.params.affiliateId,
+      ...params,
+    };
+    const url = `${baseUrl}/ItemList?${this.generateGetParams(cmbParams)}`;
+    const response = UrlFetchApp.fetch(url);
     const txt = response.getContentText();
     const data = JSON.parse(txt) as ItemListResponse;
     return data;
